@@ -29,31 +29,49 @@ void progressBar(const int & i, const int & N)
     static bool isEnd;
     static int index;
 
+    int barlength = progressBarLength;
+    if (N < barlength)
+        barlength = N;
+
     if (0 == i)
     {
         startTime = clock();
-        fmt::print(style, "\n{}", startChar);
+        fmt::print("\n");
         isStart = true;
         isEnd = false;
         index = 1;
     }
-    else if (isStart && !isEnd && N-1 <= i)
-    {
-        fmt::print(style, "{}\n", endChar);
-        isStart = false;
-        isEnd = true;
 
-        clock_t endTime = clock();
-        double consumTime = (double)(endTime - startTime) / CLOCKS_PER_SEC * 1000;
-        fmt::print("\nTime consuming: {:.2f} ms\n", consumTime);
-    }
-    else if (isStart && !isEnd)
+    if (isStart && !isEnd)
     {
-        double len = N * 1.0 / progressBarLength;
-        if (i > index*len)
+        double len = N * 1.0 / barlength;
+        if (i - index*len > 1e-15)
         {
             index++;
-            fmt::print(style, fullChar);
+
+            fmt::print("\r");
+
+            fmt::print(style, startChar);
+
+            int j = 0;
+            for (; j < index; j++)
+                fmt::print(style, fullChar);
+            
+            for (; j < barlength; j++)
+                fmt::print(style, blankChar);
+            
+            fmt::print(style, endChar);
+
+            clock_t endTime = clock();
+            double consumTime = (double)(endTime - startTime) / CLOCKS_PER_SEC * 1000;
+            fmt::print("| {} / {} | {:.2f} |", index, barlength, consumTime);
         }
+    }
+
+    if (isStart && !isEnd && N-1 <= i)
+    {
+        isStart = false;
+        isEnd = true;
+        fmt::print("\n\n");
     }
 }
