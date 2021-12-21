@@ -45,7 +45,7 @@ void progressBar(const int & i, const int & N)
     if (isStart && !isEnd)
     {
         double len = N * 1.0 / barlength;
-        if (i - index*len > 1e-15)
+        if (abs(i - index*len) < 1e-15)
         {
             index++;
 

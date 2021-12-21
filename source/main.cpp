@@ -6,9 +6,9 @@ using namespace std;
 
 int main(int argc,char **argv)
 {
-    for(int i=0; i < 39; i++)
+    for(int i=0; i < 10000000; i++)
     {
-        progressBar(i, 39);
+        progressBar(i, 10000000);
         // sleep(0);
     }
 
