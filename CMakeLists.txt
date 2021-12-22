@@ -10,14 +10,8 @@ enable_language(CXX)
 # 支持c++ 11
 set(CMAKE_CXX_STANDARD 11)
 
-# # 添加预编译
-# add_definitions(-UPETSC_USE_REAL_SINGLE -DPETSC_USE_REAL_DOUBLE )
-
-# 设定编译组态，RelWithDebInfo指优化运行速度同时产生debug信息
-# set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")
-
-# pkg
-find_package(fmt REQUIRED)
+# 设定编译组态
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")
 
 # 设置源文件和头文件路径
 file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/source/*.cpp)
@@ -25,13 +19,10 @@ file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/source/*.cpp)
 # 设置头文件路径
 include_directories(${PROJECT_SOURCE_DIR}/include/)
 
-# 添加源文件
-add_executable(${PROJECT_NAME} ${SRCS})
+# 生成
+add_library(spdProgressBar SHARED ${SRCS})
 
-# link lib
-if(fmt_FOUND)
-    target_include_directories(${PROJECT_NAME} PRIVATE ${fmt_INCLUDE_DIR})
-    target_link_libraries(${PROJECT_NAME} fmt::fmt)
-else(fmt_FOUND)
-    message(FATAL_ERROR "fmt library not found")
-endif(fmt_FOUND)
+# 设置lib属性
+set_target_properties(spdProgressBar PROPERTIES OUTPUT_NAME "spdProgressBar")
+set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_LIST_DIR}/lib/)
+
