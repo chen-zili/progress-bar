@@ -2,27 +2,25 @@
 cmake_minimum_required(VERSION 3.0.0)
 
 # 项目名称，也是最后生成的可执行文件名
-project(spdProgressBar)
+project(test)
 
-# 语言支持
+# 启用对Fortran语言的支持
 enable_language(CXX)
 
-# 支持c++ 11
-set(CMAKE_CXX_STANDARD 11)
-
-# 设定编译组态
+# 设置全局路径
 set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")
 
-# 设置源文件和头文件路径
-file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/source/*.cpp)
+# 头文件路径
+set (PROJECTPATH ${PROJECT_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/fmt/include/)
+include_directories(${PROJECT_SOURCE_DIR}/spdProBar/include/)
 
-# 设置头文件路径
-include_directories(${PROJECT_SOURCE_DIR}/include/)
+file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/*.cpp)
 
-# 生成
-add_library(spdProgressBar SHARED ${SRCS})
+# 添加源文件
+add_executable(${PROJECT_NAME} ${SRCS})
 
-# 设置lib属性
-set_target_properties(spdProgressBar PROPERTIES OUTPUT_NAME "spdProgressBar")
-set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_LIST_DIR}/lib/)
+add_subdirectory(spdProBar)
 
+# 链接
+target_link_libraries(${PROJECT_NAME} spdProBar)
