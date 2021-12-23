@@ -8,7 +8,7 @@ std::string blankChar = " ";
 
 int progressBarLength = 40;
 
-fmt::v8::text_style style = fg(fmt::color::black);
+fmt::v8::text_style style = fg(fmt::color::green);
 
 /*-----------------------------------------------------------------------------
 Function progressBar
@@ -64,7 +64,7 @@ void progressBar(const int & i, const int & N)
 
             clock_t endTime = clock();
             double consumTime = (double)(endTime - startTime) / CLOCKS_PER_SEC * 1000;
-            fmt::print("| {} / {} | {:.2f} |", index, barlength, consumTime);
+            fmt::print("| {}/{} | {:.2f} ms |", index, barlength, consumTime);
         }
     }
 

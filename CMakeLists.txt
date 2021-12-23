@@ -15,7 +15,7 @@ set (PROJECTPATH ${PROJECT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/fmt/include/)
 include_directories(${PROJECT_SOURCE_DIR}/spdProBar/include/)
 
-file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/*.cpp)
+file(GLOB_RECURSE SRCS ${PROJECT_SOURCE_DIR}/main.cpp)
 
 # 添加源文件
 add_executable(${PROJECT_NAME} ${SRCS})
