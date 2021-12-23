@@ -1,30 +1,30 @@
 #include "progress_bar.hpp"
 
-// 全局控制变量
 std::string startChar = "|";
 std::string endChar = ">";
 std::string fullChar = "-";
 std::string blankChar = " ";
 
+// min{progressBarLength, N}
 int progressBarLength = 40;
 
 fmt::v8::text_style style = fg(fmt::color::green);
 
 /*-----------------------------------------------------------------------------
 Function progressBar
-提供简易的命令行进度条显示
+Provides a simple command line progress bar display
 
-参数: 
-    i       计数值, 值从0至N-1
-            i =  0   进度条开始
-            i >= N-1 进度条结束
+Parameter: 
+    i       Count value, from 0 to N-1
+            i =  0      start
+            i >= N-1    end
     
-    N       循环次数
+    N       Number of cycles
 
 -----------------------------------------------------------------------------*/
-void progressBar(const int & i, const int & N)
+void progressBar(const int &i, const int &N)
 {
-    static clock_t startTime;
+    static clock_t startTime; // time control
     static bool isStart;
     static bool isEnd;
     static int index;
@@ -33,19 +33,20 @@ void progressBar(const int & i, const int & N)
     if (N < barlength)
         barlength = N;
 
-    if (0 == i)
+    if (0 == i) // start
     {
         startTime = clock();
+        fmt::print("\033[?25l"); // hide cursor
         fmt::print("\n");
         isStart = true;
         isEnd = false;
         index = 1;
     }
 
-    if (isStart && !isEnd)
+    if (isStart && !isEnd) // loop
     {
         double len = N * 1.0 / barlength;
-        if (abs(i - index*len) < 1e-15)
+        if (abs(i - index * len) < 1e-15)
         {
             index++;
 
@@ -56,22 +57,44 @@ void progressBar(const int & i, const int & N)
             int j = 0;
             for (; j < index; j++)
                 fmt::print(style, fullChar);
-            
+
             for (; j < barlength; j++)
                 fmt::print(style, blankChar);
-            
+
             fmt::print(style, endChar);
 
             clock_t endTime = clock();
             double consumTime = (double)(endTime - startTime) / CLOCKS_PER_SEC * 1000;
-            fmt::print("| {}/{} | {:.2f} ms |", index, barlength, consumTime);
+            fmt::print(style, "| {}/{} | {:.2f} ms |", index, barlength, consumTime);
         }
     }
 
-    if (isStart && !isEnd && N-1 <= i)
+    if (isStart && !isEnd && N - 1 <= i) // loop end
     {
         isStart = false;
         isEnd = true;
         fmt::print("\n\n");
+        fmt::print("\33[?25h"); // display cursor
+    }
+}
+
+/*-----------------------------------------------------------------------------
+Function wait
+Simple delay function
+
+Parameter: 
+    time_us        delay microseconds
+
+-----------------------------------------------------------------------------*/
+void wait(double time_us)
+{
+    clock_t time1, time2;
+    time1 = clock();
+    while (1)
+    {
+        time2 = clock();
+        double consumTime = (double)(time2 - time1) / CLOCKS_PER_SEC * 1000; // ms
+        if (consumTime > time_us / 1000)
+            break;
     }
 }

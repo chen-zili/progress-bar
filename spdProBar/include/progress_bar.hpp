@@ -8,6 +8,7 @@
 #include <fmt/core.h>
 #include <fmt/chrono.h>
 
-extern void progressBar(const int & i, const int & N);
+extern void progressBar(const int &i, const int &N);
+extern void wait(double time_us = 1000);
 
 #endif
